@@ -43,7 +43,6 @@ function renderFood(menu){
   return <Food key={menu.id} name={menu.name} image={menu.image} />
 }
 
-
 Food.propTypes = {
   name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
