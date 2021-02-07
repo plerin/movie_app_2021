@@ -1,32 +1,20 @@
-import { render } from '@testing-library/react';
-import React from 'react';
-import axios from "axios";
-import Movie from "./Movie";
+import React from "react";
+import { HashRouter, Route } from "react-router-dom";
+import About from "./routes/About";
+import Home from "./routes/Home";
+import Detail from "./routes/Detail";
+import Navigation from "./components/Navigation";
+import "./App.css";
 
-class App extends React.Component {
-  state = {
-      isLoading: true,
-      movies : []
-  };
-
-  // 비동기 함수, 기다려야 해
-  getMovies = async () => {
-    // data fetching으로 받아와야 하는데 axiou는 data fetching하는 layer 같은 것
-    const {data: {data: {movies}}} = await axios.get("https://yts-proxy.nomadcoders1.now.sh/list_movies.json?sort_by=rating")
-    this.setState({movies, isLoading: false});
-  }
-
-  async componentDidMount(){
-    this.getMovies();
-  }
-  render(){
-    const { isLoading, movies } = this.state;
-    return <div>{isLoading ? "Loading..." : movies.map(movie => {
-      console.log(movie);
-      return <Movie id={movie.id} year={movie.year} title={movie.title} summary={movie.summary} poster={movie.medium_cover_image}/>
-    })}</div>
-  }
+function App() {
+  return (
+    <HashRouter>
+      <Navigation />
+      <Route path="/" exact={true} component={Home} />
+      <Route path="/about" component={About} />
+      <Route path="/movie-detail" component={Detail} />
+    </HashRouter>
+  );
 }
-
 
 export default App;
