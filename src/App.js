@@ -1,30 +1,57 @@
+import { render } from '@testing-library/react';
 import React from 'react';
-import axios from "axios";
-import Movie from "./Movie";
+import PropTypes from 'prop-types';
 
-class App extends React.Component {
-  state = {
-      isLoading: true,
-      movies : []
-  };
+function Food({ name, images, rating}){
+  return <div>
+    <h1>I LIKE {name}</h1>
+    <h3>{rating} / 5.0</h3>
+    <img src={images} />
+  </div> 
+  
+}
 
-  // 비동기 함수, 기다려야 해
-  getMovies = async () => {
-    // data fetching으로 받아와야 하는데 axiou는 data fetching하는 layer 같은 것
-    const {data: {data: {movies}}} = await axios.get("https://yts-proxy.nomadcoders1.now.sh/list_movies.json?sort_by=rating")
-    this.setState({movies, isLoading: false});
+const mcdonalds = [
+  {
+    id: 1,
+    name : "빅맥",
+    images : "http://www.startuptoday.co.kr/news/photo/202007/49365_28228_4247.jpg",
+    rating : 1.2
+  },
+  {
+    id: 2,
+    name : "상하이스파이시",
+    images : "http://www.wikileaks-kr.org/news/photo/202004/83852_63003_3223.jpg",
+    rating : 3.2
+  },
+  {
+    id: 3,
+    name : "쿼터파운드",
+    images : "https://img1.daumcdn.net/thumb/R720x0.q80/?scode=mtistory2&fname=http%3A%2F%2Fcfile9.uf.tistory.com%2Fimage%2F194158114CD01B5508FED0",
+    rating : 4.2
   }
+]
 
-  async componentDidMount(){
-    this.getMovies();
-  }
-  render(){
-    const { isLoading, movies } = this.state;
-    return <div>{isLoading ? "Loading..." : movies.map(movie => {
-      console.log(movie);
-      return <Movie id={movie.id} year={movie.year} title={movie.title} summary={movie.summary} poster={movie.medium_cover_image}/>
-    })}</div>
-  }
+Food.propTypes  = {
+  name : PropTypes.string.isRequired,
+  images : PropTypes.string.isRequired,
+  rating : PropTypes.number.isRequired
+}
+
+function renderFood(menu){
+  console.log(menu)
+  return <Food key={menu.id} name={menu.name} images={menu.images} /> 
+}
+
+function App() {
+  return (
+    <div >
+      {mcdonalds.map(menu => (
+        <Food key={menu.id} name={menu.name} images={menu.images} rating={menu.rating}/> 
+      ))}
+    </div>
+    
+  );
 }
 
 
